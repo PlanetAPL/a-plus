@@ -1,0 +1,556 @@
+
+ã ========================= INTERACTIVE KEYBOARD CHART ============================
+
+DMB v:{
+ã Delete Multiple Blanks: Removes redundant blanks within a character vector
+vû' ',v,' ';
+ã vûv[(ÉÒv) WITHOUT _ss{v;'  '}];
+vû(~(v=' ')^1÷v=' ')/v;
+vû1Õ(-' '=¢1Ùv)Õv
+}
+
+CR2û"\n"
+CRû''
+
+ãK.smallfontû'<font face=''''arial, geneva, helvetica'''' size=-2'
+K.smallfontû'<font face=arial,geneva,helvetica size=1'
+K.FnKeyfontû'<font face=helvetica size=4'
+
+K.spû'<img src=pixel.gif width=1 height=25 align=top>'
+
+K.sp0û'<img src=pixel.gif width=1 height=10 align=top>'
+
+ K.sp û'<font size=1><br>&nbsp;<br></font>'
+
+ K.sp0û'<font size=1><br>&nbsp;<br></font>'
+
+K.spXû''
+
+FixBlank {v}:{
+     if (^/v=' ') vû'&nbsp;' else vûv
+     }
+
+VV {v}:{
+     ã Turns the argument (v) into a Vector of Vectors
+      vû1Õ¡(Úv=1Ùv)Úv
+      }
+
+Kn{v}:{
+    ã K.lngû+/v=1Ùv;
+     (K.Color;K.Symbol;K.Type;K.SName;K.MName;K.DName;K.Loc)ûDMB¡FixBlank¡7ÙvûVV v,10Ò(1Ùv),' ';
+     K.lngû+/^\~Ø(<'&nbsp;')½¡vû(K.Color;K.Symbol;K.Type;K.SName;K.MName;K.DName);
+
+     Indent û'&nbsp; &nbsp;';
+     IndentXû'<font color=red>&#149;&#149;</font>';
+
+     MDescûIndent,case (1ÙK.Type) {
+                           'f';'MONADIC FUNCTION:';
+                           'o';'MONADIC OPERATOR:';
+                           'a';'MONADIC FUNCTION OR OPERATOR:'; ã ambiguous symbol
+                           'n';'OPERATION:';
+                           'p';'PURPOSE:';
+                           'u';'PURPOSE:';
+                           'E';'PURPOSE';
+                           'x';'';
+                           '&';'====TABLE ERROR===='
+                          };
+     DDescûIndent,case (1ÙK.Type) {
+                           'f';'DYADIC FUNCTION:';
+                           'o';'DYADIC OPERATOR:';
+                           'a';'DYADIC FUNCTION OR OPERATOR:'; ã ambiguous symbol
+                           'n';'OPERATION:';
+                           'p';'PURPOSE:';
+                           'u';'PURPOSE:';
+                           'E';'PURPOSE';
+                           'x';'';
+                           '&';'====TABLE ERROR===='
+                          };
+
+     if ('E'=1ÙK.Type) {
+                        pû((K.Type='/')/ÉÒK.Type),ÒK.Type;
+                        MDescûIndentX,1ÕK.Type[p[0]+Ép[1]-p[0]];
+                        DDescûIndentX,1ÕK.Type[p[1]+Ép[2]-p[1]]
+                       };
+
+     ANû   (1ÙK.SymbolÅ'ABCDEFGHIJKLMNOPQRSTUVWXYZ')/'ALPHABETIC<br>CAPITAL<p>';
+     ANûAN,(1ÙK.SymbolÅ'abcdefghijklmnopqrstuvwxyz')/'ALPHABETIC<br>LOWERCASE<p>';
+     ANûAN,(1ÙK.SymbolÅ'0123456789')/'NUMERIC<p>';
+     Zû'<td align=left valign=top ';
+     ZûZ,((~'&nbsp;'½K.Symbol)^(1ÙK.Type)Å'foanpuE')/'bgcolor=#ffff00'; ã A+ symb  DK yel
+     ZûZ,((~'&nbsp;'½K.Symbol)^(1ÙK.Type)Å'& '     )/'bgcolor=#ffff88'; ã std kbd  MD yel
+     ZûZ,(( '&nbsp;'½K.Symbol)©(1ÙK.Type)Å'x'      )/'bgcolor=#ffffcc'; ã unused   LT yel
+     ZûZ,'>';
+     K.SûK.Symbol;
+     if (K.S½'&lt;') K.Sû'<';
+     if (K.S½'&gt;') K.Sû'>';
+     if (K.S½'\\') K.Sû'\';
+     if (K.S½'\''') K.Sû'''';
+     if (K.S½'&quot;') K.Sû'"';
+     posDû,`int©K.S;                       ã Decimal
+     posHû,'0123456789ABCDEF'[0 16ÎposD];  ã Hex
+     posOû,'0123456789'[0 8 8ÎposD];       ã Octal
+     posTûK.smallfont,'>[ Dec = ',(îposD),', &nbsp;Hex = ',posH,', &nbsp;Octal = ',posO,' ]</font>';  ã Text
+     if (1<ÒposD) posTû'&nbsp;';
+     if (K.Color½'green') K.Colorû'lime';
+     ZûZ,'<center><font face=Kapl size=6 color=',K.Color,'>';
+     ZûZ,K.Symbol,'</center><dl></font>';
+     ZûZ,(2<K.lng)/'<dt>',K.smallfont,'>',Indent,'SYMBOL NAME:</font><dd>',K.SName;
+     ZûZ,(2=K.lng)/'<dt>',K.smallfont,'><center>',AN,'STANDARD USAGE</center></font><dd>&nbsp;';
+     ZûZ,((2<K.lng)^(1ÙK.Type)='p')/K.sp,'[Punctuation]';
+     ZûZ,((2<K.lng)^(1ÙK.Type)='x')/K.sp,'[Unused in A+]';
+
+     ZûZ,(~(K.MName½'&nbsp;')©0=ÒK.MName)/K.sp,'<dt>',K.smallfont,'>',MDesc,'</font><dd><b><i>',K.MName,'</i></b>';
+     ZûZ,(~(K.DName½'&nbsp;')©0=ÒK.DName)/K.sp,'<dt>',K.smallfont,'>',DDesc,'</font><dd><b><i>',K.DName,'</i></b>';
+     if (K.Loc½'std') K.Locû'Standard U. S. keyboard layout';
+     if (K.Loc½'arb') K.Locû'Arbitrary placement';
+     if (K.Loc½'reltr') K.Locû'Relational symbols are grouped together<br>in a partially-symmetrical series along<br>the top row of the keyboard:<br><font face=Kapl size=+1>< ¤ = ¦ > ¨ © ^</font>';
+     if (K.Loc½'arith') K.Locû'Grouped with the arithmetic symbols<br>&quot;+&quot; and &quot;-&quot;, which are placed<br>at the top-right corner of the<br>standard U. S. keyboard layout';
+     ZûZ,(~(K.Loc½'&nbsp;')©0=ÒK.Loc)/K.sp,'<dt>',K.smallfont,'>',Indent,'REMEMBERING THE KEYBOARD LOCATION:</font><dd><font size=-1>',K.Loc,'</font>';
+     ZûZ,K.sp,'<dt>',((2¨K.lng)/K.smallfont,'>',Indent,'</font>'),((2=K.lng)/'<center>'),posT
+ã    ZûZ,K.sp0
+     }
+
+ã---------------------------------------------------------------------------------------
+ã First character is field delimiter
+ã
+ã     1      2 3  4         5       6         7       LENGTH: K.lng
+ã    `red   `ß`f`Divide`Reciprocal`Divide`Grouped with other arithmetics (+)
+ã     0      1 2  3         4       5         6       POSITION
+ã     |      | |  |         |       |         |
+ã   K.Color  | |  |   K.MName       K.DName   K.Loc
+ã            | |  |
+ã     K.Symbol |  K.SName
+ã              |
+ã         K.Type
+ã--------------|-----------------------------------------------------------------------
+ã              |
+ã      K.Type: f = fn
+ã              o = op
+ã              a = ambiguous symbol (/)
+ã              n = operation
+ã              p = punctuation
+ã              u = unspecified purpose
+ã              x = unused
+ã              e = explain
+ã
+ã--------------------------------------------------------------------------------------
+
+K.debug{}:{
+   ã Debug
+     Õ'  K.lng = ',îK.lng;
+     nû10Ù¡('K.Color';'K.Symbol';'K.Type';'K.SName';'K.MName';'K.DName';'K.Loc');
+     Õ(î¡É7),¡':',¡' ',¡' ',¡n,¡' ',¡(K.Color;K.Symbol;K.Type;K.SName;K.MName;K.DName;K.Loc);
+     }
+
+K1{v}:{
+     Zû' href="#top" onmouseover="this._tip=''';
+     ZûZ,'<table border=4 bordercolorlight=gray bordercolordark=black cellpadding=6 cellspacing=1 bgcolor=pink>';
+     ZûZ,'<tr><td bgcolor=maroon>&nbsp;<td bgcolor=maroon align=center>',K.smallfont,' color=white>N O R M A L</font><td bgcolor=maroon align=center>',K.smallfont,' color=white>M E T A &nbsp; &nbsp; ( A L T )</font><tr><td bgcolor=maroon align=center>',K.smallfont,' color=white>&nbsp; S &nbsp;<br>H<br>I<br>F<br>T<br>E<br>D<br></font>';
+     K.ZûZ,Kn v
+     }
+
+K2{v}:{
+     K.ZûK.Z,Kn v
+     }
+
+K3{v}:{
+     K.ZûK.Z,'<tr><td bgcolor=maroon align=center>',K.smallfont,' color=white>U<br>N<br>S<br>H<br>I<br>F<br>T<br>E<br>D<br></font>';
+     K.ZûK.Z,Kn v
+     }
+
+K4{v}:{
+     ZûK.Z,Kn v;
+     K.ZûZ,'</td></tr></table>''">',"\n";
+     K.WûK.WÓ1ÙÒK.Z;
+     K.ZûK.WÙK.Z;
+     K.KeysûK.WÙ@1 K.Keys;
+     K.KeysûK.Keys,K.Z
+     }
+
+Kx{Color;v}:{
+   ã Used for special keys, such as backspace/shift/enter/space
+   ã  and for special markings, such as author's name
+     Zû' href="#top" onmouseover="this._tip=''';
+     Wû150+200«~FnKeyû^/' '=Color;
+     Hû100+200«~FnKey;
+     if FnKey Colorû'silver';
+     ZûZ,'<table border=4 bordercolorlight=gray bordercolordark=black cellpadding=6 cellspacing=1 bgcolor=pink><br>&nbsp;<br>';
+     ZûZ,'<tr><td align=center width=',(îW),' height=',îH;
+     ZûZ,' valign=center bgcolor=',Color,'>',K.FnKeyfont,'><b>',v,'</b></font>';
+     K.ZûZ,'<br></td></tr></table>''">',"\n";
+     K.WûK.WÓ1ÙÒK.Z;
+     K.ZûK.WÙK.Z;
+     K.KeysûK.WÙ@1 K.Keys;
+     K.KeysûK.Keys,K.Z
+     }
+
+KB{}: {
+    ã Measures the placement of the buttons on the keyboard chart
+      OFFSETû241 0;   ã X,Y positions of offset from top left corner of image
+      KEYû45 71;
+      BSû79 71;
+      TABû64 71;
+      CAPSLOCKû86 71;
+      ENTERû87 71;
+      SHIFT_Lû109 71;    
+      SHIFT_Rû116 71;
+      CTRL_Lû86 49;
+      META_Lû85 49;
+      SPACEû376 49;
+      META_Rû86 49;
+      CTRL_Rû85 49;
+      NAMEû62 13;
+      LAYOUTû247 21;
+      UNUSEDû96 21;
+      VGAPû27;
+      VGAP_Bû24;
+      HGAPû6;
+
+     ã--------------------------------------------------
+
+      ROW0û14 4Ò0;                  ã Initialize ROW0: tilde 1 2 3 4 5 6 7 8 9 0
+      ROW0[;0]û+\4,13Ò45+6;         ã X, top left
+      ROW0[;1]û4;                   ã Y, top left
+      ROW0[;2]ûROW0[;0]+(13Ò45),78; ã X, bottom right
+      ROW0[;3]ûROW0[;1]+71;         ã Y, bottom right
+
+      ROW1û14 4Ò0;                  ã Initialize ROW1: TAB Q W E R T Y
+      ROW1[;0]û+\4,(64+6),12Ò45+6;  ã X, top left
+      ROW1[;1]û+/4 71 27;           ã Y, top left
+      ROW1[;2]ûROW1[;0]+64,(12Ò45),59; ã X, bottom right
+      ROW1[;3]ûROW1[;1]+71;         ã Y, bottom right
+
+      ROW2û13 4Ò0;                  ã Initialize ROW2: CAPS_LOCK A S D F
+      ROW2[;0]û+\4,(86+6),11Ò45+6;  ã X, top left
+      ROW2[;1]û+/4 71 27 71 27;     ã Y, top left
+      ROW2[;2]ûROW2[;0]+86,(11Ò45),87; ã X, bottom right
+      ROW2[;3]ûROW2[;1]+71;         ã Y, bottom right
+
+      ROW3û12 4Ò0;                  ã Initialize ROW3: SHIFT Z X C V
+      ROW3[;0]û+\4,(109+6),10Ò45+6; ã X, top left
+      ROW3[;1]û+/4 71 27 71 27 71 27;    ã Y, top left
+      ROW3[;2]ûROW3[;0]+109,(10Ò45),116; ã X, bottom right
+      ROW3[;3]ûROW3[;1]+71;         ã Y, bottom right
+
+      ROW4û 5 4Ò0;                  ã Initialize ROW4: CTRL META SPACE
+      ROW4[;0]û+\4,(86+6),(85+6),(376+6),86+6;   ã X, top left
+      ROW4[;1]û+/4 71 27 71 27 71 27 71 27;      ã Y, top left
+      ROW4[;2]ûROW4[;0]+86 85 376 86 85;         ã X, bottom right
+      ROW4[;3]ûROW4[;1]+49;         ã Y, bottom right
+
+      ROW5û 3 4Ò0;                  ã Initialize ROW5: NAME LAYOUT UNUSED
+      ROW5[;0]û+\4,(62+188),(247+155);              ã X, top left
+      ROW5[;1]û+/4 71 27 71 27 71 27 71 27 49 24;   ã Y, top left
+      ROW5[;2]ûROW5[;0]+62 247 96;  ã X, bottom right
+      ROW5[;3]ûROW5[;1]+13 21 21;   ã Y, bottom right
+
+      ALLûROW0,ROW1,ROW2,ROW3,ROW4,ROW5;   ã Positions of all keys
+
+      ALL[;0 2]ûALL[;0 2]+OFFSET[0];       ã OFFSET permits keyboard to be other than
+      ALL[;1 3]ûALL[;1 3]+OFFSET[1];       ã  top left corner of image
+
+      Hû(É0)ÒÒALL;
+
+     ã--------------------------------------------------
+
+      Mû21Ù@1 (5 5 5 5)îALL;
+      M[;0]û'"';
+      M[;5 10 15]û',';
+      M[;20]û'"';
+
+      K.Wû0;
+      K.Keysû0 0Ò'';
+
+     ãSample:
+     ãKEY '`red  `Ò`f`rho`shape`reshape'
+     ãUsage: f=fn  o=op  n=operation  p=punctuation  x=unused
+
+      K1 '`blue  `~`f`Tilde`Not``std';
+      K2 '`red   `~`f`Tilde`Not``std';
+      K3 '|blue  |`|u|Back-quote<br>Accent Grave|</i>used to create symbols||std';
+      K4 '`green `þ`x`Diamond```arb';
+
+      K1 '`blue  `!`f`Shriek<br>(Exclamation Point)<br>(Bang)`Item Ravel`Restructure`std';
+      K2 '`red   `à`f`I-beam`Map In`Map`arb';
+      K3 '`blue  `1';
+      K4 '`red   `¡`E/MONADIC OPERATOR:/`Dieresis<br>(Di&#230;resis)<br>(Umlaut)`Each<br>Apply</b></i><br>',K.smallfont,'>With either of these operators,<br>the derived function may be Monadic or Dyadic``arb';
+
+      K1 '`blue  `@`E//DYADIC OPERATOR`At symbol<br>(Commercial At)``Rank</b></i><br>',K.smallfont,'>The derived function may be Monadic or Dyadic`std';
+      K2 '`green `æ`x`Del Tilde<br>Protection Del```arb';
+      K3 '`blue  `2';
+      K4 '`red   `¢`p`High-bar`denotes negative numbers``arb';
+
+    ã Some names are from the Punctuation Liberation Front
+      K1 '`blue  `#`f`Number-sign<br>Pound-sign<br>(Crosshatch / Hash mark / Octothorpe)`Count`Choose`std';
+    ã Octathorpe is from Bell System: orinally octalthorpe
+      K2 '`red   `ç`f`Del Stile`Grade Down``arb';
+      K3 '`blue  `3';
+      K4 '`red   `&lt;`f`Left Angle-Bracket<br>(Less-than symbol)`Less than`Box</i></b> or <b><i>Enclose`reltr';
+
+      K1 '`blue  `$`E/PURPOSE/PURPOSE`Dollar sign`- delimiter for system commands<br>- abandon current function execution<br> &nbsp; &nbsp; </b></b><i>(used as a synonym for <font face=Kapl size=+1>ý</font>)``std';
+      K2 '`red   `è`f`Delta Stile`Grade Up`Bins`arb';
+      K3 '`blue  `4';
+      K4 '`red   `¤`f`Less than or equal to``Less than or equal to`reltr';
+
+      K1 '`blue  `%`f`Percent sign`Value`Value in Context`std';
+      K2 '`red   `÷`f`Circle Stile`Reverse`Rotate`Arbitrary placement; but notice that<br>four circle-symbols are grouped together';
+      K3 '`blue  `5';
+      K4 '`red   `=`f`Equal sign``Equal to`reltr';
+
+      K1 '`blue  `^`f`Caret<br>Circumflex`Stop`And`std';
+      K2 '`red   `ô`f`Circle Backslash`Transpose`Transpose Axes`Arbitrary placement; but notice that<br>four circle-symbols are grouped together';
+      K3 '`blue  `6';
+      K4 '`red   `¦`f`Greater than or equal to``Greater than or equal to`reltr';
+
+      K1 '`blue  `&`E/PURPOSE/PURPOSE`Ampersand`Execution stack references``std';
+      K2 '`green `á`x`Circle Bar<br>(Aspirin)```Arbitrary placement; but notice that<br>four circle-symbols are grouped together';
+      K3 '`blue  `7';
+      K4 '`red   `>`f`Right Angle-Bracket<br>(Greater-than symbol)`Unbox</i></b> or <b><i>Disclose`Greater than`reltr';
+
+      K1 '`blue  `*`f`Star<br>Asterisk`Exponential`Power`std';
+      K2 '`red   `ð`f`Circle Star<br>Log Symbol`Natural Log`Log`Grouped with <font face=Kapl size=+1>*</font>';
+      K3 '`blue  `8';
+      K4 '`red   `¨`f`Not equal``Not equal to`reltr';
+
+      K1 '`blue  `(`p`Left Paren<br>Open Parenthesis```std';
+      K2 '`green `¹`x`Nor```Grouped with &quot;<font face=Kapl size=+1>©</font>&quot;';
+      K3 '`blue  `9';
+      K4 '`red   `©`f`Down Caret`Type`Or</i></b> &nbsp; ',K.smallfont,'>(with Boolean arguments)</font><br><b><i>Cast</i></b> &nbsp; ',K.smallfont,'>(with a symbol as the left argument)</font>`reltr';
+
+      K1 '`blue  `)`p`Right Paren<br>Close Parenthesis```std';
+      K2 '`green `°`x`Nand```Grouped with &quot;<font face=Kapl size=+1>^</font>&quot;';
+      K3 '`blue  `0';
+      K4 '`red   `^`f`Caret`Stop`And`reltr';
+
+      K1 '`blue  `_`E/PURPOSE/PURPOSE`Underbar<br>Underscore`used as a separator in names``std';
+      K2 '`red   `!`f`Shriek<br>(Exclamation Point)<br>(Bang)`Item Ravel`Restructure`arb';
+      K3 '`blue  `-`f`Mid-bar`Negate`Minus`std';
+      K4 '`red   `«`f`St. Andrews Cross`Sign`Times`arith';
+
+      K1 '`blue  `+`f`Plus sign`Identity`Add`std';
+      K2 '`red   `­`f`Domino`Matrix Inverse`Solve`Grouped with &quot;<font face=Kapl size=+1>ß</font>&quot;';
+      K3 '`blue  `=`f`Equals``Equals`std';
+      K4 '`red   `ß`f`Divide`Reciprocal`Divide`arith';
+
+      ''Kx 'Backspace Key';
+      ''Kx '&nbsp;<p>Tab Key</b>',K.smallfont,'><br>(tab character)<br>&nbsp;<p>[ Dec = 9, Hex = 09, Octal = 11 ]</font>';
+
+      K1 '`blue  `Q';
+      K2 '`green `¿`x`Spanish Open Query```Grouped with &quot;<font face=Kapl size=+1>?</font>&quot;';
+      K3 '`blue  `q';
+      K4 '`red   `?`f`Query`Roll`Deal`On the Q key, for &quot;Query&quot;';
+
+      K1 '`blue  `W';
+      K2 '';
+      K3 '`blue  `w';
+      K4 '`green `×`x`Omega```On the W key, because<br>it <i>looks like</i> a W';
+
+      K1 '`blue  `E';
+      K2 '`green `å`x`Epsilon Underbar```Grouped with <font face=Kapl size=+1>Å</font>';
+      K3 '`blue  `e';
+      K4 '`red   `Å`f`Epsilon`Rake`Member`On the E key, for &quot;Epsilon&quot;';
+
+      K1 '`blue  `R';
+      K2 '';
+      K3 '`blue  `r';
+      K4 '`red   `Ò`f`Rho`Shape`Reshape`On the R key, for &quot;Rho&quot;';
+
+      K1 '`blue  `T';
+      K2 '';
+      K3 '`blue  `t';
+      K4 '`red   `~`f`Tilde`Not``On the T key, for &quot;Tilde&quot;';
+
+      K1 '`blue  `Y';
+      K2 '`green `´`x`Yen```On the Y key, for &quot;Yen&quot;.<br>Also, it <i>looks like</i> a Y';
+      K3 '`blue  `y';
+      K4 '`red   `Ù`f`Up Arrow`Signal`Take`Arbitrary placement;<br>Grouped beside the <font face=Kapl size=+1>Õ</font> symbol';
+
+      K1 '`blue  `U';
+      K2 '';
+      K3 '`blue  `u';
+      K4 '`red   `Õ`f`Down Arrow`Print`Drop`Arbitrary placement;<br>To remember which arrow is on<br>which key, picture the <font face=Kapl size=+1>Õ</font> arrow<br>pointing <i>down into</i> the U.';
+
+      K1 '`blue  `I';
+      K2 '`green `é`x`Iota Underbar```Grouped with <font face=Kapl size=+1>É</font>';
+      K3 '`blue  `i';
+      K4 '`red   `É`f`Iota`Interval`Find<br>(Index of)`On the I key, for &quot;Iota&quot;';
+
+      K1 '`blue  `O';
+      K2 '`green `ï`x`Hoof```Grouped with Circle (<font face=Kapl size=+1>Ï</font>)';
+      K3 '`blue  `o';
+      K4 '`red   `Ï`f`Circle`Pi times`Circle`On the O key, because<br>it <i>looks like</i> an O';
+
+      K1 '`blue  `P';
+      K2 '`green `³`x`Pound Sterling```On the P key, for &quot;Pound&quot;';
+      K3 '`blue  `p';
+      K4 '`red   `*`f`Star<br>Asterisk`Exponential`Power`On the P key, for &quot;Power&quot;.',K.sp,'Also, picture a &quot;star&quot; as<br>representing ultimate power';
+
+      K1 '`blue  `{`p`Left Brace```std';
+      K2 '`red   `Ý`f`Left Tack',K.sp0,K.smallfont,'>Can\''t remember which is which?<br>Left tack (like a thumbtack) points toward the left,<br>just as a left arrow points toward the left.</font>`Null`Left`Arbitrary placement;<br>Grouped beside <font face=Kapl size=+1>Û</font>';
+      K3 '`blue  `[`p`Left Bracket```std';
+      K4 '`red   `û`E/PURPOSE/PURPOSE`Left Arrow`Resume execution`Assignment`Arbitrary placement;<br>Grouped beside <font face=Kapl size=+1>ý</font>';
+
+      K1 '`blue  `}`p`Right Brace```std';
+      K2 '`red   `Û`f`Right Tack',K.sp0,K.smallfont,'>Can\''t remember which is which?<br>Right tack (like a thumbtack) points toward the right,<br>just as a right arrow points toward the right.</font>`Right``Arbitrary placement;<br>Grouped beside <font face=Kapl size=+1>Ý</font>';
+      K3 '`blue  `]`p`Right Bracket```std';
+      K4 '`red   `ý`E/PURPOSE/PURPOSE`Right Arrow`- abandon current function execution<br>- clear most-recent suspension``Arbitrary placement;<br>Grouped beside <font face=Kapl size=+1>û</font>';
+
+      K1 '`blue  `|`f`Vertical Bar<br>Stile`Absolute Value`Residue<br>(Modulo / Modulus)`std';
+      K2 '`green `ü`x`Delta Underbar<br>(Delta Underscored)```arb';
+      K3 '`blue  `\\`E/DYADIC FUNCTION/MONADIC OPERATOR, DERIVING A DYADIC FUNCTION`Backslash`Expand`Scan`std';
+      K4 '`green `Ü`x`Backslash Bar```Grouped with <font face=Kapl size=+1>\\</font>';
+
+      ''Kx 'Caps Lock Key';
+
+      K1 '`blue  `A';
+      K2 '';
+      K3 '`blue  `a';
+      K4 '`green `Á`x`Alpha```On the A key, for &quot;Alpha&quot;';
+
+      K1 '`blue  `S';
+      K2 '`green `¾`x`Squad<br>Squish Quad';
+      K3 '`blue  `s';
+      K4 '`red   `Ó`f`Up Stile`Ceiling`Max`On the S key, for &quot;Seeling&quot; <i>(sic)</i>';
+
+      K1 '`blue  `D';
+      K2 '';
+      K3 '`blue  `d';
+      K4 '`red   `Ä`f`Down Stile`Floor`Min`On the D key, for &quot;Down Stile&quot;';
+
+      K1 '`blue  `F';
+      K2 '`red   `½`f`Equal Underbar<br>(Tri-bar)`Depth`Match`Grouped with the underbar';
+      K3 '`blue  `f';
+      K4 '`red   `_`E/PURPOSE/PURPOSE`Underbar<br>Underscore`used as a separator in names``arb';
+
+      K1 '`blue  `G';
+      K2 '`red   `ç`f`Del Stile`Grade Down``Grouped with <font face=Kapl size=+1>Ç</font>';
+      K3 '`blue  `g';
+      K4 '`green `Ç`x`Del```Arbitrary placement;<br>Grouped beside the <font face=Kapl size=+1>È</font>';
+
+      K1 '`blue  `H';
+      K2 '`red   `è`f`Delta Stile`Grade Up`Bins`Grouped with <font face=Kapl size=+1>È</font>';
+      K3 '`blue  `h';
+      K4 '`green `È`x`Delta```Arbitrary placement;<br>Grouped beside the <font face=Kapl size=+1>Ç</font>';
+
+      K1 '`blue  `J';
+      K2 '`green `ê`x`Paw```Grouped with Jot (<font face=Kapl size=+1>Ê</font>)';
+      K3 '`blue  `j';
+      K4 '`red   `Ê`E//PLACEHOLDER FOR DYADIC OPERATOR`Jot``</i>used with Dot (<font face=Kapl size=+1>Ê.</font>) for Outer Product</b></i><br>',K.smallfont,'>The derived function is Dyadic`On the J key, for &quot;Jot&quot;';
+
+      K1 '`blue  `K';
+      K2 '';
+      K3 '`blue  `k';
+      K4 '`red   `\''`p`Quote<br>Single Quote<br>Apostrophe```On the K key, for &quot;Kwote&quot;';
+
+      K1 '`blue  `L';
+      K2 '`green `ì`x`Quote Quad<br>(Quad Prime)```Arbitrary placement, but<br>grouped beside the other <font face=Kapl size=+1>Ì</font>-symbols';
+      K3 '`blue  `l';
+      K4 '`green `Ì`x`Quad```Arbitrary placement, but<br>grouped with the other <font face=Kapl size=+1>Ì</font>-symbols';
+
+      K1 '`blue  `:`E/PURPOSE/PURPOSE`Colon`</i>- used to create Defined Functions<br>- used to create Dependencies``std';
+      K2 '`green `¼`x`Quad Backslash```Arbitrary placement, but<br>grouped beside the other <font face=Kapl size=+1>Ì</font>-symbols';
+      K3 '`blue  `;`E/PURPOSE/PURPOSE`Semicolon`Statement Separator:<br></i>- used to separate multiple statements on one line<br>- used to end statements in defined functions<br>- used to separate elements for nested arrays<br>- used to separate dimensions within bracket indexing``std';
+      K4 '`red   `Û`f`Right Tack',K.sp0,K.smallfont,'>Can\''t remember which is which?<br>Right tack (like a thumbtack) points toward the right,<br>just as a right arrow points toward the right.</font>`Right``Arbitrary placement;<br>Grouped beside <font face=Kapl size=+1>Ý</font>';
+
+      K1 '`blue  `&quot;`p`Double Quote';
+      K2 '`green `»`x`Quad Jot<br>(Camera)```Arbitrary placement, but<br>grouped beside the other <font face=Kapl size=+1>Ì</font>-symbols';
+      K3 '`blue  `\''`p`Quote';
+      K4 '`red   `Ý`f`Left Tack',K.sp0,K.smallfont,'>Can\''t remember which is which?<br>Left tack (like a thumbtack) points toward the left,<br>just as a left arrow points toward the left.</font>`Null`Left`Arbitrary placement;<br>Grouped beside <font face=Kapl size=+1>Û</font>';
+
+      ''Kx '&nbsp;<p>Enter Key</b>',K.smallfont,'><br>(newline character)<br>&nbsp;<p>[ Dec = 10, Hex = 10, Octal = 12 ]</font>';
+      ''Kx 'Shift Key';
+
+      K1 '`blue  `Z';
+      K2 '`green `ú`x`Cent```On the same key as <font face=Kapl size=+1>Ú</font><br>because it resembles it';
+      K3 '`blue  `z';
+      K4 '`red   `Ú`f`Left Shoe`Partition Count`Partition`Arbitrary placement, but the four<br>set symbols (<font face=Kapl size=+1>Ú</font>, <font face=Kapl size=+1>Ø</font>, <font face=Kapl size=+1>Ã</font>, and <font face=Kapl size=+1>Ö</font>) are<br>grouped together at the bottom-left corner.',K.sp,'Also, the left shoe is to the left<br>of the right shoe.';
+
+      K1 '`blue  `X';
+      K2 '';
+      K3 '`blue  `x';
+      K4 '`red   `Ø`f`Right Shoe`Raze`Pick`Arbitrary placement, but the four<br>set symbols (<font face=Kapl size=+1>Ú</font>, <font face=Kapl size=+1>Ø</font>, <font face=Kapl size=+1>Ã</font>, and <font face=Kapl size=+1>Ö</font>) are<br>grouped together at the bottom-left corner.',K.sp,'Also, the right shoe is to the right<br>of the left shoe.';
+
+      K1 '`blue  `C';
+      K2 '`red   `ã`E/PURPOSE/PURPOSE`Lamp`</i>used for comments<br></b>',K.smallfont,,'> &nbsp; &nbsp; &nbsp; (A lamp is intended to provide illumination)``On the C key, for &quot;Comment&quot;;<br>Grouped with Cap (<font face=Kapl size=+1>Ã</font>)';
+      K3 '`blue  `c';
+      K4 '`green `Ã`x`Cap<br>Up Shoe```On the C key, for &quot;Cap&quot;;<br>The four set symbols (<font face=Kapl size=+1>Ú</font>, <font face=Kapl size=+1>Ø</font>, <font face=Kapl size=+1>Ã</font>, and <font face=Kapl size=+1>Ö</font>) are<br>grouped together at the bottom-left corner';
+
+      K1 '`blue  `V';
+      K2 '';
+      K3 '`blue  `v';
+      K4 '`red   `Ö`f`Cup<br>Down Shoe`Separate Symbols`Combine Symbols`Arbitrary placement, but the four<br>set symbols (<font face=Kapl size=+1>Ú</font>, <font face=Kapl size=+1>Ø</font>, <font face=Kapl size=+1>Ã</font>, and <font face=Kapl size=+1>Ö</font>) are<br>grouped together at the bottom-left corner.',K.sp,'Remember also that this symbol is<br>turned in the same direction as the V.';
+
+      K1 '`blue  `B';
+      K2 '`red   `â`f`Hydrant<br>(Base Jot)`Execute`Protected Execute`Grouped with Base (<font face=Kapl size=+1>Â</font>)';
+      K3 '`blue  `b';
+      K4 '`red   `Â`f`Base<br>Up Tack',K.sp,K.smallfont,'>(The point is facing up)</font>`Pack`Decode<br>(Base)`On the B key, for &quot;Base&quot;';
+
+      K1 '`blue  `N';
+      K2 '`red   `î`f`Thorn<br>(Top Jot)`Default Format`Format`Grouped with Top (<font face=Kapl size=+1>Î</font>)';
+      K3 '`blue  `n';
+      K4 '`red   `Î`f`Top<br>Down Tack',K.sp,K.smallfont,'>(The point is facing down)</font>`Unpack`Encode<br>(Representation)`On the N key, for &quot;ENcode&quot;';
+
+      K1 '`blue  `M';
+      K2 '`green `Í`x`Vertical Bar (decorator only)`</b></i>',K.smallfont,'><b>Note:</b> Even though this symbol <i>looks like</i>the A+<br>Stile symbol, it <i>cannot</i> be used as an A+ function.``Grouped with the A+ Stile character (<font face=Kapl size=+1>Í</font>)';
+      K3 '`blue  `m';
+      K4 '`red   `|`f`Stile<br>(Vertical Bar)`Absolute Value`Residue<br>(Modulo / Modulus)`On the M key, for &quot;Modulus&quot;';
+
+      K1 '`blue  `&lt;`f`Left Angle-Bracket<br>(Less-than symbol)`Less than`Box</i></b> or <b><i>Enclose`std';
+      K2 '`red   `&lt;`f`Left Angle-Bracket<br>(Less-than symbol)`Less than`Box</i></b> or <b><i>Enclose`std';
+      K3 '`blue  `,`f`Comma`Ravel`Catenate`std';
+      K4 '`green `¬`x`Comma Bar```Grouped with Comma (<font face=Kapl size=+1>,</font>)';
+
+      K1 '`blue  `>`f`Right Angle-Bracket<br>(Greater-than symbol)`Unbox</i></b> or <b><i>Disclose`Greater than`std';
+      K2 '`red   `®`E/MONADIC OPERATOR/`Dotted Del<br>(Dieresis Dot)`Bitwise</b></i><br>',K.smallfont,'>The derived function may be Monadic or Dyadic``Arbitrary placement, but<br>grouped with Dot (<font face=Kapl size=+1>.</font>),<br>because this is Dieresis Dot';
+      K3 '`blue  `.`E//DYADIC OPERATOR`Dot<br>(Period)``used for Inner Product</b></i><br>',K.smallfont,'>The derived function is Dyadic`std';
+      K4 '`green `Ü`x`Backslash Bar```Grouped beside the <font face=Kapl size=+1>¯</font> symbol';
+
+      K1 '`blue  `?`f`Query`Roll`Deal`std';
+      K2 '`red   `?`f`Query`Roll`Deal`std';
+      K3 '`blue  `/`E/DYADIC FUNCTION/MONADIC OPERATOR, DERIVING A DYADIC FUNCTION`Slash<br>(Virgule)<br>(Solidus)<br>(Diagonal)`Compress`Reduce`std';
+      K4 '`green `¯`x`Slash Bar```Grouped with <font face=Kapl size=+1>/</font>';
+
+      ''Kx 'Shift Key';
+      ''Kx 'Ctrl </b>(Control)<b> Key';
+      ''Kx '&nbsp;<p>On Sun workstations,<br>this is the<br>Meta Key<p>On PCs,<br>this is the<br>Alt </b>(Alternate)<b> Key<p>&nbsp;';
+      ''Kx '&nbsp;<p>Space Bar</b>',K.smallfont,'><br>(space or blank character)<br>&nbsp;<p>[ Dec = 32, Hex = 20, Octal = 40 ]</font>';
+      ''Kx '&nbsp;<p>On Sun workstations,<br>this is the<br>Meta Key<p>On PCs,<br>this is the<br>Alt </b>(Alternate)<b> Key<p>&nbsp;';
+      ''Kx 'Ctrl </b>(Control)<b> Key';
+      'ivory' Kx 'For more information, contact:<p>Jon McGrew:<br>Jon.McGrew@MSDW.com';
+      'ivory' Kx 'This chart is also available in printed form, as<br><font color=red><i>The A+ Keyboard Reference Chart Tentcard</i></font>.<p>If you are not yet familiar with<br>all of the special A+ keyboard positions,<br>this might be a handy reference chart<br>to keep beside your workstation.<p>',(30Ò'_'),'<br>&nbsp;<p>Contact Jon McGrew:<br>Jon.McGrew@MSDW.com';
+      'ivory' Kx 'These characters are<br>available in the APL font,<br>and are used on<br>some other APL systems.<p>All of the standard characters<br>in the APL font<br>can be entered<br>from the keyboard.<p>The characters shown<br>in <font color=green>green</font>, however,<br>have no assigned purpose<br>within the A+ language.';
+
+    ã -------------------------------------------------------------------------------
+
+      Tû'<area shape="rect" coords=';
+      MûM[É1ÙÒK.Keys;];
+      Hû(É0)ÒÒM;
+      Tû(H,ÒT)ÒT;
+      MûT,@1 M;
+      MûM,@1 K.Keys;
+
+      MûM
+}
+
+$load file
+
+Keyboard{} : {
+
+      ÕTSû'Last updated ',`mdy _sfmt 0 100 100Â3Ùsys.ts{};
+      MûKB{};
+      DIRû'/u/aplus/repository/';
+      K.Topûfile.read DIR,'keyboard_TOP';
+      K.Bottomûfile.read DIR,'keyboard_BOTTOM';
+
+      K.WûÓ/Ø¢1Ù¡Ò¡(K.Top;M;K.Bottom);
+
+      K.TopûK.WÙ@1 K.Top;
+      MûK.WÙ@1 M;
+      K.BottomûK.WÙ@1 K.Bottom;
+     
+      Lû,(Ø(<@1 K.Bottom)½¡<K.WÙ'<!-- TIMESTAMP: -->')/É1ÙÒK.Bottom;
+      if (1=ÒL) K.Bottom[1+(É0)ÒL;]ûK.WÙ'<font face=arial,geneva,helvetica size=1><! ',TS,'></font><br>';
+
+      MûK.Top,M,K.Bottom;
+      file.write {ÕDIR,'keyboard.html';M}
+     }
